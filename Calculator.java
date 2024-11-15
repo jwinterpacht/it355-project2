@@ -63,6 +63,7 @@ class Calculator {
      * CWE –209: Generation of error messages containing sensitive information.
      * CWE-248: Uncaught Exception
      * 
+     * 
      * @return The result of arr[0] / arr[1].
      * @throws ArithmeticException If an attempt is made to divide by zero.
      */
@@ -79,7 +80,7 @@ class Calculator {
 
     /**
      * Calculates and prints the square root of the two numbers stored in the array.
-     * CWE-1071: Empty Code Block*
+     * CWE-1071: Empty Code Block
      * 
      * @throws IllegalArgumentException If either arr[0] or arr[1] is negative.
      */
@@ -111,6 +112,8 @@ class Calculator {
      * CWE-1071: Empty Code Block*
      * 
      * @return True if arr[0] is even, false otherwise.
+     * 
+     *  CWE-570: Expression is Always False
      */
     public boolean isEvenValue1() {
 
@@ -121,6 +124,8 @@ class Calculator {
      * Checks if the second number in the array is even.
      *
      * @return True if arr[0] is even, false otherwise.
+     * 
+     *  CWE-570: Expression is Always False
      */
     public boolean isEvenValue2() {
 
@@ -145,14 +150,16 @@ class Calculator {
      * @throws IllegalArgumentException If the Scanner object is null.
      * @throws IllegalStateException    If the Scanner object is closed.
      * @throws InputMismatchException   If the user inputs a non-integer value.
+     * 
+     * CWE-233: Improper Handling of Parameters
+     * CWE-248: Uncaught Exception
+     * CWE-396: Declaration of Generic Exception
+     * CWE –209: Generation of error messages containing sensitive information.
+     * 
      */
     public int[] getValues(Scanner scan) {
 
-        // CWE-233: Improper Handling of Parameters
-        // CWE-248: Uncaught Exception
-        // CWE-396: Declaration of Generic Exception
-        // throw IllegalArgumentException if scanner is null
-        // CWE –209: Generation of error messages containing sensitive information.
+        
         try {
             System.out.println("Value 1: ");
 
@@ -195,6 +202,7 @@ class Calculator {
     }
 
     // CWE-835: Loop with unreachable exit condition (infinite loop)
+    //CWE-606: Unchecked Input for Loop Condition 
     // CWE-570: Expression is Always False
     public static void main(String[] args) throws Exception {
 
