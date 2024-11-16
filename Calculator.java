@@ -3,26 +3,24 @@ import java.util.Random;
 import java.util.Scanner;
 
 /*
-*Simple calculator program meant to mitigate Common Weakness Enumerations.
+* Simple calculator program meant to mitigate Common Weakness Enumerations.
 * Authors: David Arellano,Addison Casner, Santiago Kipp, Suhail Tailor, Jaden Winterpacht
-* This whole class demonstrates CWE-1113: Inappropriate Comment Style and CWE-1116: Inaccurate Comment Style,
-* as all comments follow Javadoc conventions.
+* This whole class demonstrates CWE-1113: Inappropriate Comment Style, CWE-1116: Inaccurate Comment Style,
+* CWE-1114: Inappropriate Whitespace Style
+* as all comments follow JavaDoc conventions.
 */
 class Calculator {
-
     // CWE-582: Array Declared Public, Final, and Static
     // CWE-500: Public Static Field Not Marked Final
     private static final int[] arr = new int[2];
 
     /**
      * Adds two numbers stored in the array.
+     * 
      * CWE-1071: Empty Code Block
      * 
-     * 
      * @return The sum of arr[0] and arr[1].
-     * @throws ArithmeticException If an integer overflow occurs during the
-     *                             addition.
-     * 
+     * @throws ArithmeticException If an integer overflow occurs during the addition.
      */
     public int add() {
         // CWE-190: Integer Overflow or Wraparound
@@ -37,21 +35,27 @@ class Calculator {
 
     /**
      * Subtracts the second number from the first number stored in the array.
+     * 
      * CWE-1071: Empty Code Block
      *
      * @return The result of arr[0] - arr[1].
+     * @throws ArithmeticException If an integer underflow occurs during the subtraction.
      */
     public int subtract() {
-
+        // CWE-191: Integer Underflow (Wrap or Wraparound)
+        if ((arr[1] > 0 && arr[0] < Integer.MIN_VALUE + arr[1]) || // Check for integer underflow
+            (arr[1] < 0 && arr[0] > Integer.MAX_VALUE + arr[1])) {
+            throw new ArithmeticException("Integer underflow detected.");
+        }
         return arr[0] - arr[1];
     }
 
     /**
      * Multiplies two numbers stored in the array.
+     * 
      * CWE-1071: Empty Code Block
      *
      * @return The product of arr[0] and arr[1].
-     * 
      */
     public int multiple() {
         return arr[0] * arr[1];
@@ -59,10 +63,10 @@ class Calculator {
 
     /**
      * Divides the first number by the second number stored in the array.
+     * 
      * CWE-1071: Empty Code Block
      * CWE –209: Generation of error messages containing sensitive information.
      * CWE-248: Uncaught Exception
-     * 
      * 
      * @return The result of arr[0] / arr[1].
      * @throws ArithmeticException If an attempt is made to divide by zero.
@@ -80,6 +84,7 @@ class Calculator {
 
     /**
      * Calculates and prints the square root of the two numbers stored in the array.
+     * 
      * CWE-1071: Empty Code Block
      * 
      * @throws IllegalArgumentException If either arr[0] or arr[1] is negative.
@@ -109,57 +114,58 @@ class Calculator {
 
     /**
      * Checks if the first number in the array is even.
-     * CWE-1071: Empty Code Block*
+     * 
+     * CWE-1071: Empty Code Block
+     * CWE-570: Expression is Always False
      * 
      * @return True if arr[0] is even, false otherwise.
-     * 
-     *  CWE-570: Expression is Always False
      */
     public boolean isEvenValue1() {
-
-        return (arr[0] % 2 == 0);
+        // CWE-480: Use of Incorrect Operator
+        return (arr[0] % 2 == 0); // Ensure that the operator being used to check for even values is modulus
     }
 
     /**
      * Checks if the second number in the array is even.
-     *
-     * @return True if arr[0] is even, false otherwise.
      * 
-     *  CWE-570: Expression is Always False
+     * CWE-570: Expression is Always False
+     * 
+     * @return True if arr[0] is even, false otherwise.
      */
     public boolean isEvenValue2() {
 
         return (arr[1] % 2 == 0);
     }
 
+    /**
+     * Generates two random values between 0 and 1000, then prints the two values to the console.
+     */
     public void generateRandomValues() {
         // CWE-334: Small Space of Random Values
         // Use a larger range for the random values to avoid predictability.
         Random r = new Random();
-        arr[0] = r.nextInt(1000) - 500; // Random integer between -500 and 499
-        arr[1] = r.nextInt(1000) - 500; // Random integer between -500 and 499
+        // Random integer between 0 and 1000
+        arr[0] = r.nextInt(1001);
+        arr[1] = r.nextInt(1001); 
         System.out.println("Generated Random Values: Value 1 = " + arr[0] + ", Value 2 = " + arr[1]);
     }
 
     /**
      * Reads two integer values from the provided Scanner object and stores them in
      * the array.
+     * 
+     * CWE-233: Improper Handling of Parameters
+     * CWE-248: Uncaught Exception
+     * CWE-396: Declaration of Generic Exception
+     * CWE –209: Generation of error messages containing sensitive information.
      *
      * @param scan A valid and open Scanner object for reading input.
      * @return The array containing the two integers entered by the user.
      * @throws IllegalArgumentException If the Scanner object is null.
      * @throws IllegalStateException    If the Scanner object is closed.
      * @throws InputMismatchException   If the user inputs a non-integer value.
-     * 
-     * CWE-233: Improper Handling of Parameters
-     * CWE-248: Uncaught Exception
-     * CWE-396: Declaration of Generic Exception
-     * CWE –209: Generation of error messages containing sensitive information.
-     * 
      */
     public int[] getValues(Scanner scan) {
-
-        
         try {
             System.out.println("Value 1: ");
 
@@ -174,7 +180,6 @@ class Calculator {
             }
 
             int num1 = 0;
-
             int num2 = 0;
 
             // CWE-1287: Improper Validation of Specified Type of Input
@@ -198,73 +203,105 @@ class Calculator {
             System.out.println("Invalid input");
         }
         return arr;
-
     }
 
-    // CWE-835: Loop with unreachable exit condition (infinite loop)
-    //CWE-606: Unchecked Input for Loop Condition 
-    // CWE-570: Expression is Always False
+    /**
+     * Main method is the driver of the calculator app.
+     * Contains user interface elements and calls Calculator methods.
+     * 
+     * // CWE-835: Loop with unreachable exit condition (infinite loop)
+     * // CWE-606: Unchecked Input for Loop Condition 
+     * // CWE-570: Expression is Always False
+     * // CWE-1124: Excessively Deep Nesting
+     * 
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
-
-        // CWE-665: Improper Initailization
+        // CWE-665: Improper Initialization
         Scanner scanner = new Scanner(System.in);
         Calculator calc = new Calculator();
-
-        System.out.println(" Calculator Running");
-
+    
+        System.out.println("Calculator Running");
+    
         int option;
-
+        boolean useRandomValues = false;
+    
         do {
-            calc.getValues(scanner);
-            System.out.println("1. Add two values");
-            System.out.println("2. Subtract two values");
-            System.out.println("3. Mutiply two values ");
-            System.out.println("4. Divide two values");
-            System.out.println("5. Square Root two values");
-            System.out.println("6. Check Odd or Even");
+            System.out.println("1. Provide two values");
+            System.out.println("2. Generate random values");
             System.out.println("0. Exit");
-            System.out.print("Enter option: ");
-            option = scanner.nextInt();
-
-            switch (option) {
-                case 1:
-                    System.out.println("Result: " + calc.add());
-                    break;
-                case 2:
-                    System.out.println("Result: " + calc.subtract());
-                    break;
-                case 3:
-                    System.out.println("Result: " + calc.multiple());
-                    break;
-                case 4:
-                    System.out.println("Result: " + calc.divide());
-                    break;
-                case 5:
-                    calc.squareRoot();
-                    break;
-                case 6:
-
-                    // CWE-252: Unchecked Return Value
-                    // CWE-570: Expression is Always False
-                    boolean result1 = calc.isEvenValue1();
-                    if (result1) {
-                        System.out.println("Even");
-                    } else {
-                        System.out.println("Odd");
-                    }
-
-                    boolean result2 = calc.isEvenValue2();
-                    if (result2) {
-                        System.out.println("Even");
-                    } else {
-                        System.out.println("Odd");
-                    }
-
-                    break;
-
+            System.out.print("Choose an option: ");
+            int inputOption = scanner.nextInt();
+    
+            if (inputOption == 1) {
+                calc.getValues(scanner);
+                useRandomValues = false;
+            } else if (inputOption == 2) {
+                calc.generateRandomValues();
+                useRandomValues = true;
+            } else if (inputOption == 0) {
+                System.out.println("Exiting...");
+                break;
+            } else {
+                System.out.println("Invalid option. Try again.");
+                continue;
             }
-        } while (option != 0);
-
+            do {
+                System.out.println("1. Add two values");
+                System.out.println("2. Subtract two values");
+                System.out.println("3. Multiply two values");
+                System.out.println("4. Divide two values");
+                System.out.println("5. Square Root two values");
+                System.out.println("6. Check Odd or Even");
+                System.out.println("7. Generate random numbers");
+                System.out.println("0. Exit to main menu");
+                System.out.print("Enter option: ");
+                option = scanner.nextInt();
+    
+                switch (option) {
+                    case 1:
+                        System.out.println("Result: " + calc.add());
+                        break;
+                    case 2:
+                        System.out.println("Result: " + calc.subtract());
+                        break;
+                    case 3:
+                        System.out.println("Result: " + calc.multiple());
+                        break;
+                    case 4:
+                        System.out.println("Result: " + calc.divide());
+                        break;
+                    case 5:
+                        calc.squareRoot();
+                        break;
+                    case 6:
+                        // CWE-252: Unchecked Return Value
+                        // CWE-570: Expression is Always False
+                        boolean result1 = calc.isEvenValue1();
+                        System.out.println("Value 1 is " + (result1 ? "Even" : "Odd"));
+    
+                        boolean result2 = calc.isEvenValue2();
+                        System.out.println("Value 2 is " + (result2 ? "Even" : "Odd"));
+                        break;
+                    case 7:
+                        if (!useRandomValues) {
+                            calc.generateRandomValues();
+                            useRandomValues = true;
+                        } else {
+                            System.out.println("Random values already in use. Re-generating.");
+                            calc.generateRandomValues();
+                        }
+                        break;
+                    case 0:
+                        System.out.println("Returning to main menu...");
+                        break;
+                    default:
+                        System.out.println("Invalid option. Try again.");
+                }
+            } while (option != 0);
+        } while (true);
+    
         scanner.close();
     }
 }

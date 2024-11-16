@@ -1,0 +1,5 @@
+# Ignore .class files
+Calculator.class
+
+# Ignore macOS system files
+.DS_Store
