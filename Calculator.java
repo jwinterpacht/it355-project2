@@ -15,6 +15,22 @@ class Calculator {
     private static final int[] arr = new int[2];
 
     /**
+     * CWE-466: Return of Pointer Value Outside of Expected Range
+     * 
+     * @param index The index to access in the array.
+     * @return The value at the specified index if within range, or -1 if outside of
+     *         the valid range.
+     */
+    public int returnOutOfRangeValue(int index) {
+        // CWE-466: Return of Pointer Value Outside of Expected Range
+        if (index < 0 || index >= arr.length) {
+            System.err.println("Warning: Accessing index outside of expected range.");
+            return -1; // Indicating an invalid access
+        }
+        return arr[index];
+    }
+
+    /**
      * Adds two numbers stored in the array.
      * 
      * CWE-1071: Empty Code Block
@@ -253,6 +269,7 @@ class Calculator {
                 System.out.println("5. Square Root two values");
                 System.out.println("6. Check Odd or Even");
                 System.out.println("7. Generate random numbers");
+                System.out.println("8. Test out-of-range access"); // New option added
                 System.out.println("0. Exit to main menu");
                 System.out.print("Enter option: ");
                 option = scanner.nextInt();
@@ -274,8 +291,6 @@ class Calculator {
                         calc.squareRoot();
                         break;
                     case 6:
-                        // CWE-252: Unchecked Return Value
-                        // CWE-570: Expression is Always False
                         boolean result1 = calc.isEvenValue1();
                         System.out.println("Value 1 is " + (result1 ? "Even" : "Odd"));
 
@@ -291,6 +306,12 @@ class Calculator {
                             calc.generateRandomValues();
                         }
                         break;
+                    case 8: // New case for testing out-of-range access
+                        System.out.print("Enter an index to access (0 or 1 is valid): ");
+                        int index = scanner.nextInt();
+                        int value = calc.returnOutOfRangeValue(index);
+                        System.out.println("Value returned: " + value);
+                        break;
                     case 0:
                         System.out.println("Returning to main menu...");
                         break;
@@ -298,6 +319,7 @@ class Calculator {
                         System.out.println("Invalid option. Try again.");
                 }
             } while (option != 0);
+
         } while (true);
 
         scanner.close();
