@@ -291,6 +291,8 @@ class Calculator {
                         calc.squareRoot();
                         break;
                     case 6:
+                        // CWE-252: Unchecked Return Value
+                        // CWE-570: Expression is Always False
                         boolean result1 = calc.isEvenValue1();
                         System.out.println("Value 1 is " + (result1 ? "Even" : "Odd"));
 
