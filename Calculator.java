@@ -24,7 +24,7 @@ class Calculator {
     public int returnOutOfRangeValue(int index) {
         // CWE-466: Return of Pointer Value Outside of Expected Range
         if (index < 0 || index >= arr.length) {
-            System.err.println("Warning: Accessing index outside of expected range.");
+            System.err.println("Accessing index outside of expected range.");
             return -1; // Indicating an invalid access
         }
         return arr[index];
