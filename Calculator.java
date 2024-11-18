@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /*
 * Simple calculator program meant to mitigate Common Weakness Enumerations.
-* Authors: David Arellano,Addison Casner, Santiago Kipp, Suhail Tailor, Jaden Winterpacht
+* Authors: David Arellano, Addison Casner, Santiago Kipp, Suhail Tailor, Jaden Winterpacht
 * This whole class demonstrates CWE-1113: Inappropriate Comment Style, CWE-1116: Inaccurate Comment Style,
 * CWE-1114: Inappropriate Whitespace Style
 * as all comments follow JavaDoc conventions.
@@ -20,7 +20,8 @@ class Calculator {
      * CWE-1071: Empty Code Block
      * 
      * @return The sum of arr[0] and arr[1].
-     * @throws ArithmeticException If an integer overflow occurs during the addition.
+     * @throws ArithmeticException If an integer overflow occurs during the
+     *                             addition.
      */
     public int add() {
         // CWE-190: Integer Overflow or Wraparound
@@ -39,12 +40,13 @@ class Calculator {
      * CWE-1071: Empty Code Block
      *
      * @return The result of arr[0] - arr[1].
-     * @throws ArithmeticException If an integer underflow occurs during the subtraction.
+     * @throws ArithmeticException If an integer underflow occurs during the
+     *                             subtraction.
      */
     public int subtract() {
         // CWE-191: Integer Underflow (Wrap or Wraparound)
         if ((arr[1] > 0 && arr[0] < Integer.MIN_VALUE + arr[1]) || // Check for integer underflow
-            (arr[1] < 0 && arr[0] > Integer.MAX_VALUE + arr[1])) {
+                (arr[1] < 0 && arr[0] > Integer.MAX_VALUE + arr[1])) {
             throw new ArithmeticException("Integer underflow detected.");
         }
         return arr[0] - arr[1];
@@ -65,7 +67,7 @@ class Calculator {
      * Divides the first number by the second number stored in the array.
      * 
      * CWE-1071: Empty Code Block
-     * CWE –209: Generation of error messages containing sensitive information.
+     * CWE-209: Generation of error messages containing sensitive information
      * CWE-248: Uncaught Exception
      * 
      * @return The result of arr[0] / arr[1].
@@ -101,13 +103,13 @@ class Calculator {
         if (sqrt1 > Integer.MAX_VALUE || sqrt2 > Integer.MAX_VALUE) {
             System.err.println("Error: Result exceeds the range of an integer.");
         } else {
-            // CWE-1109: Use of same variable for multiple purposes(created new int variable
-            // for printing)
+            // CWE-1109: Use of same variable for multiple purposes (created new int
+            // variable for printing)
             int sqrt1Result = (int) sqrt1;
             int sqrt2Result = (int) sqrt2;
 
             System.out.println("Value 1 Square Root: " + sqrt1Result);
-            System.out.println("Value 1 Square Root: " + sqrt2Result);
+            System.out.println("Value 2 Square Root: " + sqrt2Result);
         }
 
     }
@@ -133,20 +135,19 @@ class Calculator {
      * @return True if arr[0] is even, false otherwise.
      */
     public boolean isEvenValue2() {
-
         return (arr[1] % 2 == 0);
     }
 
     /**
-     * Generates two random values between 0 and 1000, then prints the two values to the console.
+     * Generates two random values between 0 and 1000, then prints the two values to
+     * the console.
+     * CWE-406: Missing Authentication for Critical Functions
      */
     public void generateRandomValues() {
         // CWE-334: Small Space of Random Values
-        // Use a larger range for the random values to avoid predictability.
         Random r = new Random();
-        // Random integer between 0 and 1000
         arr[0] = r.nextInt(1001);
-        arr[1] = r.nextInt(1001); 
+        arr[1] = r.nextInt(1001);
         System.out.println("Generated Random Values: Value 1 = " + arr[0] + ", Value 2 = " + arr[1]);
     }
 
@@ -157,7 +158,8 @@ class Calculator {
      * CWE-233: Improper Handling of Parameters
      * CWE-248: Uncaught Exception
      * CWE-396: Declaration of Generic Exception
-     * CWE –209: Generation of error messages containing sensitive information.
+     * CWE-547: Use of Hard-coded, Security-relevant Constants
+     * CWE-120: Buffer Copy without Checking Size of Input
      *
      * @param scan A valid and open Scanner object for reading input.
      * @return The array containing the two integers entered by the user.
@@ -168,13 +170,9 @@ class Calculator {
     public int[] getValues(Scanner scan) {
         try {
             System.out.println("Value 1: ");
-
             if (scan == null) {
-                throw new IllegalArgumentException("Error: Scanner cannnot be null.");
+                throw new IllegalArgumentException("Error: Scanner cannot be null.");
             }
-            // CWE-233: Improper Handling of Parameters
-            // CWE-396: Declaration of Generic Exception(throw IllegalStateException)
-            // throw IllegalStateException if scanner is closed.
             if (!scan.hasNext()) {
                 throw new IllegalStateException("Error: Scanner object is closed.");
             }
@@ -184,23 +182,21 @@ class Calculator {
 
             // CWE-1287: Improper Validation of Specified Type of Input
             if (scan.hasNextInt()) {
-
                 num1 = scan.nextInt();
             } else {
                 throw new InputMismatchException("The input is not an integer.");
             }
             System.out.println("Value 2: ");
-
             if (scan.hasNextInt()) {
                 num2 = scan.nextInt();
             } else {
                 throw new InputMismatchException("The input is not an integer.");
             }
-            arr[0] = num1;
-            arr[1] = num2;
 
+            arr[0] = num1; // Storing values without bounds check
+            arr[1] = num2;
         } catch (Exception e) {
-            System.out.println("Invalid input");
+            System.out.println("Invalid input: " + e.getMessage());
         }
         return arr;
     }
@@ -209,10 +205,11 @@ class Calculator {
      * Main method is the driver of the calculator app.
      * Contains user interface elements and calls Calculator methods.
      * 
-     * // CWE-835: Loop with unreachable exit condition (infinite loop)
-     * // CWE-606: Unchecked Input for Loop Condition 
-     * // CWE-570: Expression is Always False
-     * // CWE-1124: Excessively Deep Nesting
+     * CWE-835: Loop with unreachable exit condition (infinite loop)
+     * CWE-606: Unchecked Input for Loop Condition
+     * CWE-570: Expression is Always False
+     * CWE-1124: Excessively Deep Nesting
+     * CWE-134: Use of Externally Controlled Format String
      * 
      * @param args
      * @throws Exception
@@ -221,19 +218,19 @@ class Calculator {
         // CWE-665: Improper Initialization
         Scanner scanner = new Scanner(System.in);
         Calculator calc = new Calculator();
-    
+
         System.out.println("Calculator Running");
-    
+
         int option;
         boolean useRandomValues = false;
-    
+
         do {
             System.out.println("1. Provide two values");
             System.out.println("2. Generate random values");
             System.out.println("0. Exit");
             System.out.print("Choose an option: ");
             int inputOption = scanner.nextInt();
-    
+
             if (inputOption == 1) {
                 calc.getValues(scanner);
                 useRandomValues = false;
@@ -258,7 +255,7 @@ class Calculator {
                 System.out.println("0. Exit to main menu");
                 System.out.print("Enter option: ");
                 option = scanner.nextInt();
-    
+
                 switch (option) {
                     case 1:
                         System.out.println("Result: " + calc.add());
@@ -280,7 +277,7 @@ class Calculator {
                         // CWE-570: Expression is Always False
                         boolean result1 = calc.isEvenValue1();
                         System.out.println("Value 1 is " + (result1 ? "Even" : "Odd"));
-    
+
                         boolean result2 = calc.isEvenValue2();
                         System.out.println("Value 2 is " + (result2 ? "Even" : "Odd"));
                         break;
@@ -301,7 +298,7 @@ class Calculator {
                 }
             } while (option != 0);
         } while (true);
-    
+
         scanner.close();
     }
 }
