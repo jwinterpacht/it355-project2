@@ -308,7 +308,9 @@ class Calculator {
                             calc.generateRandomValues();
                         }
                         break;
-                    case 8: // New case for testing out-of-range access
+                    case 8: 
+                        // CWE-466: Return of Pointer Value Outside of Expected Range
+                        // tests for array elements and prevents it from going outside of the array's range
                         System.out.print("Enter an index to access (0 or 1 is valid): ");
                         int index = scanner.nextInt();
                         int value = calc.returnOutOfRangeValue(index);
